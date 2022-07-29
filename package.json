@@ -1,0 +1,19 @@
+{
+  "name": "leetcode-actions-flow",
+  "version": "1.0.0",
+  "description": "A template repo for a clean LeetCode development flow (GitHub Actions)",
+  "main": "main.js",
+  "scripts": {
+    "start": "npm main.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kid-on-github/leetcode-actions-flow.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kid-on-github/leetcode-actions-flow/issues"
+  },
+  "homepage": "https://github.com/kid-on-github/leetcode-actions-flow#readme"
+}
