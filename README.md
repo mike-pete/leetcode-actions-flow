@@ -1,21 +1,35 @@
-# leetcode-actions-flow
-A template repo for a clean LeetCode development flow (GitHub Actions)
+# LeetCode Solutions
+A template repo for a clean LeetCode development flow using GitHub Actions.
 
-hello some desc
-these are the solutions so far
-some table here with links to the solutions and name and such
+## How it Works
+## Usage
+talk about file and directory naming
+## Example
+description here with a link to our leetcode repos
+## Filetypes Supported
 
+| Language   | File Extensions |
+|------------|-----------------|
+| C++        | .cpp            |
+| Java       | .java           |
+| Python     | .py             |
+| Python3    | .py3            |
+| C          | .c              |
+| C#         | .cs             |
+| JavaScript | .js             |
+| TypeScript | .ts             |
+| Ruby       | .rb             |
+| Swift      | .swift          |
+| Go         | .go             |
+| Scala      | .sc             |
+| Kotlin     | .kt             |
+| Rust       | .rs             |
+| PHP        | .php            |
+| Racket     | .rkt            |
+| Erlang     | .erl            |
+| Elixir     | .exs            |
+| Dart       | .dart           |
 
-
-
-npm i node-fetch
-npm i cheerio
-
-npm i axios cheerio pretty
-
-npm install cypress
-
-
-
-npx cypress run --spec cypress/e2e/scrapeLeetCode.cy.js -e challenge="two-sum"
-npx cypress run --spec cypress/e2e/scrapeLeetCode.cy.js -e challenge="two-sum" --config supportFile=false
+## Authors
+- [Michael Peterson](https://github.com/kid-on-github)
+- [Andrew Larson](https://github.com/Kefka174)
