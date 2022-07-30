@@ -16,4 +16,4 @@ jobs:
           ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
       - run: echo "benis"
-      - run: git log --name-status HEAD^.. HEAD
+      - run: git diff --name-status `git merge-base main test`..test 
