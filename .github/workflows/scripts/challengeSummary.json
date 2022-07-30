@@ -1,4 +1,7 @@
 {
-  "readmeSummary": "",
+  "readmeSummary": [
+    "# LeetCode Solutions\nSame basic desc",
+    "## How it Works\nsuper basic overview\n\n#### [fork the project](http://example.com) "
+  ],
   "challengesCompleted": {}
 }

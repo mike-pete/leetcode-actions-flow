@@ -4,6 +4,7 @@ A template repo for a clean LeetCode development flow using GitHub Actions.
 ## How it Works
 ## Usage
 talk about file and directory naming
+don't upload non-solutions to the /solutions directory
 ## Example
 description here with a link to our leetcode repos
 ## Filetypes Supported

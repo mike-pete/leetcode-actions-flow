@@ -87,7 +87,7 @@ const buildChallengeReadme = (challengeName) => {
     currentPrimaryElementIndex++
   }
 
-  saveChallengeReadme(title, readmeText)
+  saveChallengeReadme(challengeName, readmeText)
 }
 
-buildChallengeReadme("3Sum")
+buildChallengeReadme(process.argv[2])

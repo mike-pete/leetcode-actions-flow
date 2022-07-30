@@ -1,4 +1,3 @@
-import { load } from "cheerio"
 import fs from "fs"
 
 // languages supported: C++, Java, Python, Python3, C, C#, JavaScript, Ruby, Swift, Go, Scala, Kotlin, Rust, PHP, TypeScript, Racket, Erlang, Elixir, Dart
