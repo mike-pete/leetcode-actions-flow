@@ -17,3 +17,4 @@ jobs:
       - run: echo "🍏 This job's status is ${{ job.status }}."
       - run: echo "benis"
       - run: git diff --name-status `git merge-base main test`..test 
+      - run: echo $( git diff --name-status `git merge-base main test`..test | grep -E "A\s|D\s" )
