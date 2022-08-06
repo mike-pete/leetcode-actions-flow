@@ -43,7 +43,7 @@ jobs:
         with:
           node-version: '12.x'
       - name: Install node dependencies
-        run: npm install
+        run: npm install --prefix ./.github/workflows/scripts
         
       - name: Echo local folder list
         run: echo ${solutionFolders[@]}
