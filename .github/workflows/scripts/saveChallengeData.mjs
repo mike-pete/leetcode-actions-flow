@@ -2,7 +2,7 @@ import fetch from "node-fetch"
 import fs from "fs"
 
 const getChallengeDataFromFile = () => {
-  const data = fs.readFileSync("./github/workflows/scripts/challengeSummary.json")
+  const data = fs.readFileSync("./.github/workflows/scripts/challengeSummary.json")
   return JSON.parse(data)
 }
 
