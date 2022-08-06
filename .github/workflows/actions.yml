@@ -25,7 +25,7 @@ jobs:
                 solutionFolders+=("$directory")
               fi
             done
-            echo "::set-output name=solutionFolders::$solutionFolders"
+            echo "::set-output name=solutionFolders::${solutionFolders[@]}"
             
 
   buildREADMEs:
