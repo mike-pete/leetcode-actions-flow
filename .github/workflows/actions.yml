@@ -80,6 +80,7 @@ jobs:
       - run: |
             if [[ "$(git status --porcelain)" != "" ]]
             then
+              date > generated.txt
               git config user.name "GitHub Action"
               git config user.email "action@github.com"
               git add .
