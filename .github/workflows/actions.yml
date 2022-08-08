@@ -75,9 +75,9 @@ jobs:
       # - name: Update main challenge table
         # run: node .github/workflows/scripts/buildRepoReadme.mjs
         
-      - name: Push changes
-        uses: actions/checkout@v3
-        run: |
+      #- name: Push changes
+      - uses: actions/checkout@v3
+      - run: |
             if [[ "$(git status --porcelain)" != "" ]]
             then
               git config user.name "GitHub Action"
