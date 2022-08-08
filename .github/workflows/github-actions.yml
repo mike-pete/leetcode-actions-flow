@@ -1,0 +1,90 @@
+name: Generate READMEs
+
+on:
+  push:
+    paths:
+      - 'solutions/**'
+
+jobs:
+  Check-for-needed-READMEs:
+    runs-on: ubuntu-latest
+    outputs:
+      foldersNeedingREADMEs: ${{ steps.set_directories.outputs.solutionFolders }}
+      
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+            
+      - name: Check repo for directories without READMEs
+        id: set_directories
+        run: |
+            for directory in $(ls -d solutions/* | cut -d / -f2)
+            do
+              if ! test -f "solutions/$directory/README.md"
+              then
+                solutionFolders+=("$directory")
+              fi
+            done
+            echo "::set-output name=solutionFolders::${solutionFolders[@]}"
+            
+  Build-READMEs:
+    needs: [Check-for-needed-READMEs]
+    if: needs.Check-for-needed-READMEs.outputs.foldersNeedingREADMEs != null
+    runs-on: ubuntu-latest
+    env:
+      solutionFolders: ${{needs.Check-for-needed-READMEs.outputs.foldersNeedingREADMEs}}
+      github_token: ${{ secrets.WORKFLOW_TOKEN }}
+
+    permissions: 
+      write-all
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v1 
+        with:
+          node-version: '12.x'
+      - name: Install node dependencies
+        run: npm install --prefix ./.github/workflows/scripts
+        
+      - name: Echo local folder list
+        run: echo ${solutionFolders[@]}
+        
+      - name: Gather question data json for each valid challenge
+        run: |
+            for directory in ${solutionFolders[@]}
+            do
+              node .github/workflows/scripts/saveChallengeData.mjs $directory
+            done
+        
+      - name: Block upload of invalid LeetCode challenge solutions
+        run: |
+            for directory in ${solutionFolders[@]}
+            do
+              if ! $(jq '.challengesCompleted | has("'$directory'")' .github/workflows/scripts/challengeSummary.json)
+              then
+                rm -r solutions/$directory
+              fi
+            done
+        
+      - name: Generate individual solution READMEs
+        run: |
+            for directory in ${solutionFolders[@]}
+            do
+              node .github/workflows/scripts/buildChallengeReadme.mjs $directory
+            done
+        
+      - name: Update main challenge table
+        run: node .github/workflows/scripts/buildRepoReadme.mjs
+        
+      - name: Push changes
+        run: |
+            if [[ "$(git status --porcelain)" != "" ]]
+            then
+              git config user.name "GitHub Action"
+              git config user.email "action@github.com"
+              git add .
+              git commit -m "Auto-generate README.md"
+              git push
+            fi
