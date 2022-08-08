@@ -59,7 +59,7 @@ jobs:
         run: |
             for directory in ${solutionFolders[@]}
             do
-              if ! $(jq '.challengesCompleted | has("'$directory'")' .github/workflows/scripts/challengeSummary.json)
+              if ! $(jq '.challengesCompleted | has("'$directory'")' scripts/challengeSummary.json)
               then
                 rm -r solutions/$directory
               fi

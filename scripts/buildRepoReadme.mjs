@@ -46,18 +46,18 @@ const buildRepoReadme = () => {
 | - | --------- | ---------- | --------- | -------- |`
 
   Object.values(challengesCompleted).map(({ title, difficulty, categoryTitle, questionFrontendId }) => {
-    const files = fs.readdirSync(`./solutions/${title.split(' ').join('-').toLowerCase()}`)
+    const files = fs.readdirSync(`solutions/${title.split(' ').join('-').toLowerCase()}`)
 
     const challengeId = `[${questionFrontendId}](https://leetcode.com/problems/${title.toLowerCase()}/)`
 
-    const challenge = `[${title}](./solutions/${title})`
+    const challenge = `[${title}](solutions/${title})`
 
     const solutions = files.map((file) => {
       const splitAtDots = file.split(".")
       const extension = splitAtDots[splitAtDots.length - 1]
       const language = fileExtensions[extension]
 
-      return `[${language}](./solutions/${title}/${file})`
+      return `[${language}](solutions/${title}/${file})`
     })
 
     table += `\n| ${challengeId} | ${challenge} | ${difficulty} | ${solutions.join(", ")} | ${categoryTitle} |`

@@ -10,7 +10,7 @@ const getChallengeDataFromFile = (challengeName) => {
 }
 
 const saveChallengeReadme = (fileName, fileContents) => {
-	fs.writeFile(`./solutions/${fileName}/README.md`, fileContents, (err) => {
+	fs.writeFile(`solutions/${fileName}/README.md`, fileContents, (err) => {
 		if (err) {
 			console.error(err)
 		}
