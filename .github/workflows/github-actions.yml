@@ -34,6 +34,9 @@ jobs:
     env:
       solutionFolders: ${{needs.Check-for-needed-READMEs.outputs.foldersNeedingREADMEs}}
 
+    permission:
+      workflows: write
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
