@@ -1,13 +1,15 @@
-import fetch from "node-fetch"
-import fs from "fs"
+import fetch from 'node-fetch'
+import fs from 'fs'
 
 const getChallengeDataFromFile = () => {
-  const data = fs.readFileSync("./.github/workflows/scripts/challengeSummary.json")
-  return JSON.parse(data)
+	const data = fs.readFileSync(
+		'./.github/workflows/scripts/challengeSummary.json'
+	)
+	return JSON.parse(data)
 }
 
 const getChallengeDataFromGraphQL = async (challengeName) => {
-  const query = `
+	const query = `
     query allQuestions($titleSlug: String!) {
       question(titleSlug: $titleSlug) {
         title
@@ -18,51 +20,57 @@ const getChallengeDataFromGraphQL = async (challengeName) => {
     }
   `
 
-  const graphql = JSON.stringify({
-    query,
-    variables: { titleSlug: challengeName.toLowerCase() },
-  })
+	const graphql = JSON.stringify({
+		query,
+		variables: { titleSlug: challengeName.toLowerCase() },
+	})
 
-  const requestOptions = {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: graphql,
-    redirect: "follow",
-  }
+	const requestOptions = {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: graphql,
+		redirect: 'follow',
+	}
 
-  const response = await fetch("https://leetcode.com/graphql", requestOptions).catch((error) => {
-    console.error("error fetching data", error)
-    return null
-  })
-  const responseJSON = await response.json()
+	const response = await fetch(
+		'https://leetcode.com/graphql',
+		requestOptions
+	).catch((error) => {
+		console.error('error fetching data', error)
+		return null
+	})
+	const responseJSON = await response.json()
 
-  const { errors } = responseJSON
+	const { errors } = responseJSON
 
-  if (errors) {
-    console.error("error fetching data", errors)
-    return null
-  } else {
-    return responseJSON
-  }
+	if (errors) {
+		console.error('error fetching data', errors)
+		return null
+	} else {
+		return responseJSON
+	}
 }
 
 const writeChallengeDataToFile = (challengeData) => {
-  fs.writeFileSync("challengeSummary.json", JSON.stringify(challengeData))
+	fs.writeFileSync(
+		'./.github/workflows/scripts/challengeSummary.json',
+		JSON.stringify(challengeData)
+	)
 }
 
 const saveChallengeData = async (challengeName) => {
-  const graphQLData = await getChallengeDataFromGraphQL(challengeName)
+	const graphQLData = await getChallengeDataFromGraphQL(challengeName)
 
-  if (graphQLData) {
-    const { question } = graphQLData.data
+	if (graphQLData) {
+		const { question } = graphQLData.data
 
-    const savedChallengeData = getChallengeDataFromFile()
-    let updatedChallengeData = { ...savedChallengeData }
-    const key = challengeName.toLowerCase()
-    updatedChallengeData.challengesCompleted[key] = question
+		const savedChallengeData = getChallengeDataFromFile()
+		let updatedChallengeData = { ...savedChallengeData }
+		const key = challengeName.toLowerCase()
+		updatedChallengeData.challengesCompleted[key] = question
 
-    writeChallengeDataToFile(updatedChallengeData)
-  }
+		writeChallengeDataToFile(updatedChallengeData)
+	}
 }
 
 saveChallengeData(process.argv[2])

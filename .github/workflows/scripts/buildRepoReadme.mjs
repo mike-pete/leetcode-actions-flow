@@ -29,7 +29,7 @@ const getDataFromFile = () => {
 }
 
 const saveRepoReadme = (fileContents) => {
-  fs.writeFile(`../../../README2.md`, fileContents, (err) => {
+  fs.writeFile(`./README2.md`, fileContents, (err) => {
     if (err) {
       console.error(err)
     }
@@ -46,7 +46,7 @@ const buildRepoReadme = () => {
 | - | --------- | ---------- | --------- | -------- |`
 
   Object.values(challengesCompleted).map(({ title, difficulty, categoryTitle, questionFrontendId }) => {
-    const files = fs.readdirSync(`../../../solutions/${title}`)
+    const files = fs.readdirSync(`./solutions/${title.split(' ').join('-').toLowerCase()}`)
 
     const challengeId = `[${questionFrontendId}](https://leetcode.com/problems/${title.toLowerCase()}/)`
 
