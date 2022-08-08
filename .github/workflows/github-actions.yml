@@ -27,12 +27,12 @@ jobs:
             done
             echo "::set-output name=solutionFolders::${solutionFolders[@]}"
             
-  buildREADMEs:
-    needs: [checkForNeededREADMEs]
-    if: needs.checkForNeededREADMEs.outputs.foldersNeedingREADMEs != null
+  Build-READMEs:
+    needs: [Check-for-needed-READMEs]
+    if: needs.Check-for-needed-READMEs.outputs.foldersNeedingREADMEs != null
     runs-on: ubuntu-latest
     env:
-      solutionFolders: ${{needs.checkForNeededREADMEs.outputs.foldersNeedingREADMEs}}
+      solutionFolders: ${{needs.Check-for-needed-READMEs.outputs.foldersNeedingREADMEs}}
 
     steps:
       - name: Checkout repository
