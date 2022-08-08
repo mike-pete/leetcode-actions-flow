@@ -33,6 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       solutionFolders: ${{needs.Check-for-needed-READMEs.outputs.foldersNeedingREADMEs}}
+      github_token: ${{ secrets.WORKFLOW_TOKEN }}
 
     permissions: 
       write-all
@@ -78,12 +79,18 @@ jobs:
         run: node .github/workflows/scripts/buildRepoReadme.mjs
         
       - name: Push changes
-        run: |
-            if [[ "$(git status --porcelain)" != "" ]]
-            then
-              git config user.name "GitHub Action"
-              git config user.email "action@github.com"
-              git add .
-              git commit -m "Auto-generate README.md"
-              git push
-            fi
+      - uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "[Bot] Update all the things!"
+          commit_user_name: GitHub Actions
+          commit_user_email: action@github.com
+          commit_author: GitHub Actions <action@github.com>
+        # run: |
+        #     if [[ "$(git status --porcelain)" != "" ]]
+        #     then
+        #       git config user.name "GitHub Action"
+        #       git config user.email "action@github.com"
+        #       git add .
+        #       git commit -m "Auto-generate README.md"
+        #       git push
+        #     fi
