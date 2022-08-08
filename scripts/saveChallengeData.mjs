@@ -3,7 +3,7 @@ import fs from 'fs'
 
 const getChallengeDataFromFile = () => {
 	const data = fs.readFileSync(
-		'./.github/workflows/scripts/challengeSummary.json'
+		'./scripts/challengeSummary.json'
 	)
 	return JSON.parse(data)
 }
@@ -53,7 +53,7 @@ const getChallengeDataFromGraphQL = async (challengeName) => {
 
 const writeChallengeDataToFile = (challengeData) => {
 	fs.writeFileSync(
-		'./.github/workflows/scripts/challengeSummary.json',
+		'./scripts/challengeSummary.json',
 		JSON.stringify(challengeData)
 	)
 }

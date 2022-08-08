@@ -3,7 +3,7 @@ import fs from 'fs'
 
 const getChallengeDataFromFile = (challengeName) => {
 	const data = fs.readFileSync(
-		'./.github/workflows/scripts/challengeSummary.json'
+		'./scripts/challengeSummary.json'
 	)
 	const { challengesCompleted } = JSON.parse(data || {})
 	return challengesCompleted[challengeName.toLowerCase()]

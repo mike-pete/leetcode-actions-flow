@@ -24,7 +24,7 @@ const fileExtensions = {
 }
 
 const getDataFromFile = () => {
-  const data = fs.readFileSync("./.github/workflows/scripts/challengeSummary.json")
+  const data = fs.readFileSync("./scripts/challengeSummary.json")
   return JSON.parse(data)
 }
 

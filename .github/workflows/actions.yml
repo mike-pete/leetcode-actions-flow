@@ -43,7 +43,7 @@ jobs:
         with:
           node-version: '12.x'
       - name: Install node dependencies
-        run: npm install --prefix ./.github/workflows/scripts
+        run: npm install --prefix ./scripts
         
       - name: Echo local folder list
         run: echo ${solutionFolders[@]}
@@ -52,7 +52,7 @@ jobs:
         run: |
             for directory in ${solutionFolders[@]}
             do
-              node .github/workflows/scripts/saveChallengeData.mjs $directory
+              node scripts/saveChallengeData.mjs $directory
             done
         
       - name: Block upload of invalid LeetCode chalenge solutions
@@ -69,11 +69,11 @@ jobs:
         run: |
             for directory in ${solutionFolders[@]}
             do
-              node .github/workflows/scripts/buildChallengeReadme.mjs $directory
+              node scripts/buildChallengeReadme.mjs $directory
             done
         
       - name: Update main challenge table
-        run: node .github/workflows/scripts/buildRepoReadme.mjs
+        run: node scripts/buildRepoReadme.mjs
         
       - name: Push changes
         run: |
