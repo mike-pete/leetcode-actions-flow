@@ -2,8 +2,8 @@ import { load } from "cheerio"
 import fs from "fs"
 
 const getChallengeDataFromFile = (challengeName) => {
-  const data = fs.readFileSync("challengeSummary.json")
-  const { challengesCompleted } = JSON.parse(data)
+  const data = fs.readFileSync("./.github/workflows/scripts/challengeSummary.json")
+  const { challengesCompleted } = JSON.parse(data || {})
   return challengesCompleted[challengeName.toLowerCase()]
 }
 
