@@ -6,7 +6,7 @@ on:
       - 'solutions/**'
 
 jobs:
-  Check for needed READMEs:
+  Check-for-needed-READMEs:
     runs-on: ubuntu-latest
     outputs:
       foldersNeedingREADMEs: ${{ steps.set_directories.outputs.solutionFolders }}
