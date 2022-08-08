@@ -35,7 +35,7 @@ jobs:
       solutionFolders: ${{needs.Check-for-needed-READMEs.outputs.foldersNeedingREADMEs}}
 
     permissions: 
-      read-all
+      write-all
 
     steps:
       - name: Checkout repository
