@@ -46,7 +46,7 @@ const buildRepoReadme = () => {
 | - | --------- | ---------- | --------- | -------- |`
 
   Object.values(challengesCompleted).map(({ title, difficulty, categoryTitle, questionFrontendId }) => {
-    const files = fs.readdirSync(`./solutions/${title}`)
+    const files = fs.readdirSync(`./solutions/${title.split(' ').join('-')}`)
 
     const challengeId = `[${questionFrontendId}](https://leetcode.com/problems/${title.toLowerCase()}/)`
 
