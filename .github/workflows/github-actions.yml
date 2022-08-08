@@ -34,8 +34,8 @@ jobs:
     env:
       solutionFolders: ${{needs.Check-for-needed-READMEs.outputs.foldersNeedingREADMEs}}
 
-    permissions:
-      permissions: read-all
+    permissions: 
+      read-all
 
     steps:
       - name: Checkout repository
