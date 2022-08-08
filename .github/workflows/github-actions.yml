@@ -34,7 +34,7 @@ jobs:
     env:
       solutionFolders: ${{needs.Check-for-needed-READMEs.outputs.foldersNeedingREADMEs}}
 
-    permission:
+    permissions:
       workflows: write
 
     steps:
