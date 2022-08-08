@@ -48,34 +48,35 @@ jobs:
       - name: Echo local folder list
         run: echo ${solutionFolders[@]}
         
-      - name: Gather question data json for each valid challenge
-        run: |
-            for directory in ${solutionFolders[@]}
-            do
-              node .github/workflows/scripts/saveChallengeData.mjs $directory
-            done
+      # - name: Gather question data json for each valid challenge
+        # run: |
+            # for directory in ${solutionFolders[@]}
+            # do
+              # node .github/workflows/scripts/saveChallengeData.mjs $directory
+            # done
         
-      - name: Block upload of invalid LeetCode chalenge solutions
-        run: |
-            for directory in ${solutionFolders[@]}
-            do
-              if ! $(jq '.challengesCompleted | has("'$directory'")' .github/workflows/scripts/challengeSummary.json)
-              then
-                rm -r solutions/$directory
-              fi
-            done
+      # - name: Block upload of invalid LeetCode chalenge solutions
+        # run: |
+            # for directory in ${solutionFolders[@]}
+            # do
+              # if ! $(jq '.challengesCompleted | has("'$directory'")' .github/workflows/scripts/challengeSummary.json)
+              # then
+                # rm -r solutions/$directory
+              # fi
+            # done
         
-      - name: Generate individual solution READMEs
-        run: |
-            for directory in ${solutionFolders[@]}
-            do
-              node .github/workflows/scripts/buildChallengeReadme.mjs $directory
-            done
+      # - name: Generate individual solution READMEs
+        # run: |
+            # for directory in ${solutionFolders[@]}
+            # do
+              # node .github/workflows/scripts/buildChallengeReadme.mjs $directory
+            # done
         
-      - name: Update main challenge table
-        run: node .github/workflows/scripts/buildRepoReadme.mjs
+      # - name: Update main challenge table
+        # run: node .github/workflows/scripts/buildRepoReadme.mjs
         
       - name: Push changes
+        uses: actions/checkout@v3
         run: |
             if [[ "$(git status --porcelain)" != "" ]]
             then
