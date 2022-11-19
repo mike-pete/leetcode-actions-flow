@@ -9,14 +9,14 @@ jobs:
   checkForNeededREADMEs:
     runs-on: ubuntu-latest
     outputs:
-      foldersNeedingREADMEs: ${{ steps.set_directorys.outputs.solutionFolders }}
+      foldersNeedingREADMEs: ${{ steps.set_directories.outputs.solutionFolders }}
       
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
             
       - name: Check repo for directories without READMEs
-        id: set_directorys
+        id: set_directories
         run: |
             for directory in $(ls -d solutions/* | cut -d / -f2)
             do
@@ -55,7 +55,7 @@ jobs:
               node scripts/saveChallengeData.mjs $directory
             done
         
-      - name: Block upload of invalid LeetCode chalenge solutions
+      - name: Block upload of invalid LeetCode challenge solutions
         run: |
             for directory in ${solutionFolders[@]}
             do
