@@ -12,6 +12,7 @@ const getChallengeDataFromGraphQL = async (challengeName) => {
 	const query = `
     query allQuestions($titleSlug: String!) {
       question(titleSlug: $titleSlug) {
+		questionId
         title
         content
         difficulty

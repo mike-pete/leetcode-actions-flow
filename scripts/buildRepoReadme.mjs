@@ -21,6 +21,7 @@ const fileExtensions = {
   erl: "Erlang",
   exs: "Elixir",
   dart: "Dart",
+  md: "Markdown",
 }
 
 const getDataFromFile = () => {
@@ -45,22 +46,25 @@ const buildRepoReadme = () => {
 | # | Challenge | Difficulty | Solutions | Category |
 | - | --------- | ---------- | --------- | -------- |`
 
-  Object.values(challengesCompleted).map(({ title, difficulty, categoryTitle, questionFrontendId }) => {
+  Object.values(challengesCompleted).map(({ title, difficulty, categoryTitle, questionId }) => {
     const files = fs.readdirSync(`solutions/${title.split(' ').join('-').toLowerCase()}`)
 
-    const challengeId = `[${questionFrontendId}](https://leetcode.com/problems/${title.toLowerCase()}/)`
+    const challengeId = `[${questionId}](https://leetcode.com/problems/${title.toLowerCase()}/)`
 
     const challenge = `[${title}](solutions/${title})`
 
     const solutions = files.map((file) => {
       const splitAtDots = file.split(".")
       const extension = splitAtDots[splitAtDots.length - 1]
-      const language = fileExtensions[extension]
+      let language = fileExtensions[extension]
+
+      if (language === 'Markdown') {return}
+      if (language === undefined) {language = `Unknown Language (.${extension})`}
 
       return `[${language}](solutions/${title}/${file})`
     })
 
-    table += `\n| ${challengeId} | ${challenge} | ${difficulty} | ${solutions.join(", ")} | ${categoryTitle} |`
+    table += `\n| ${challengeId} | ${challenge} | ${difficulty} | ${solutions.filter((value) => value).join(", ")} | ${categoryTitle} |`
   })
 
   Object.entries(readmeSummary).map(([i, section]) => {
