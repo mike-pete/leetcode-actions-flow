@@ -64,7 +64,7 @@ const saveChallengeData = async (challengeName) => {
 
 	if (graphQLData) {
 		const { question } = graphQLData.data
-
+		question.challengeName = challengeName
 		const savedChallengeData = getChallengeDataFromFile()
 		let updatedChallengeData = { ...savedChallengeData }
 		const key = challengeName.toLowerCase()

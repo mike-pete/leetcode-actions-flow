@@ -46,12 +46,12 @@ const buildRepoReadme = () => {
 | # | Challenge | Difficulty | Solutions | Category |
 | - | --------- | ---------- | --------- | -------- |`
 
-  Object.values(challengesCompleted).map(({ title, difficulty, categoryTitle, questionId }) => {
-    const files = fs.readdirSync(`solutions/${title.split(' ').join('-').toLowerCase()}`)
+  Object.values(challengesCompleted).map(({ title, difficulty, categoryTitle, questionId, challengeName }) => {
+    const files = fs.readdirSync(`solutions/${challengeName}`)
 
-    const challengeId = `[${questionId}](https://leetcode.com/problems/${title.toLowerCase()}/)`
+    const challengeId = `[${questionId}](https://leetcode.com/problems/${challengeName}/)`
 
-    const challenge = `[${title}](solutions/${title})`
+    const challenge = `[${title}](solutions/${challengeName})`
 
     const solutions = files.map((file) => {
       const splitAtDots = file.split(".")
@@ -61,7 +61,7 @@ const buildRepoReadme = () => {
       if (language === 'Markdown') {return}
       if (language === undefined) {language = `Unknown Language (.${extension})`}
 
-      return `[${language}](solutions/${title}/${file})`
+      return `[${language}](solutions/${challengeName}/${file})`
     })
 
     table += `\n| ${challengeId} | ${challenge} | ${difficulty} | ${solutions.filter((value) => value).join(", ")} | ${categoryTitle} |`
