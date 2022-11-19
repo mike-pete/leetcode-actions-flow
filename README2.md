@@ -6,7 +6,7 @@ Same basic desc
 ## Solutions
 | # | Challenge | Difficulty | Solutions | Category |
 | - | --------- | ---------- | --------- | -------- |
-| [undefined](https://leetcode.com/problems/two sum/) | [Two Sum](solutions/Two Sum) | Easy | [undefined](solutions/Two Sum/README.md), [Python](solutions/Two Sum/two-sum.py) | Algorithms |
+| [15](https://leetcode.com/problems/3sum/) | [3Sum](solutions/3sum) | Medium | [Python](solutions/3sum/solution.py), [Unknown Language (.toast)](solutions/3sum/test.toast) | Algorithms |
 
 ## How it Works
 super basic overview
