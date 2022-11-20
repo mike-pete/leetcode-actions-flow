@@ -43,7 +43,7 @@ const buildRepoReadme = () => {
   let readme = ""
 
   let table = `\
-| # | Challenge | Difficulty | Solutions | Category |
+| LC # | Challenge Overview | Difficulty | Solutions | Category |
 | - | --------- | ---------- | --------- | -------- |`
 
   Object.values(challengesCompleted).map(({ title, difficulty, categoryTitle, questionId, challengeName }) => {
