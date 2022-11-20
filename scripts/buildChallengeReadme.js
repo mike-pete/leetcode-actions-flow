@@ -2,9 +2,7 @@ import { load } from 'cheerio'
 import fs from 'fs'
 
 const getChallengeDataFromFile = (challengeName) => {
-	const data = fs.readFileSync(
-		'./scripts/challengeSummary.json'
-	)
+	const data = fs.readFileSync('./scripts/challengeSummary.json')
 	const { challengesCompleted } = JSON.parse(data || {})
 	return challengesCompleted[challengeName.toLowerCase()]
 }
@@ -17,82 +15,60 @@ const saveChallengeReadme = (fileName, fileContents) => {
 	})
 }
 
-const formatText = (type, text) => {
-	switch (type) {
-		case 'code':
-			return `\`${text}\``
-		case 'strong':
-			return `**${text}**`
+const tagReplacer = (match) => {
+	const tagStart = match.substring(0, 2) === '</' ? '</' : '<'
+	const tagContent = match.substring(tagStart.length, match.length - 1)
+
+	const tagReplacements = {
+		strong: '**',
+		code: '`',
 	}
+
+	if (tagContent in tagReplacements) {
+		return tagReplacements[tagContent]
+	}
+
+	for (const tag of Object.keys(tagReplacements)) {
+		if (tagContent.startsWith(tag)) {
+			return tagReplacements[tag]
+		}
+	}
+
+	return match
 }
 
-const formatChildText = ($, text) => {
-	let formattedText = text
-	$('p, code, strong, pre, ul, li').map((_, el) => {
-		const childText = $(el).text()
-		const childTag = el.name
-		const formattedString = formatText(childTag, childText)
-		formattedText = formattedText.replace(childText, formattedString)
-	})
-	return formattedText
-}
-
-const addPrefixesToChildText = (formattedText, tag) => {
-	const prefixes = { p: '', pre: '> ' }
+const convertElementToMD = (tag, html) => {
+	const prefixes = { p: '\n', pre: '>\n> ', li: '\n- ' }
 	const prefix = prefixes[tag]
-	return (
-		'\n\n' + prefix + formattedText.split('\n').join(`\n${prefix}\n${prefix}`)
-	)
-}
 
-const formatChildElements = ($, text, parentTagType) => {
-	const formattedText = formatChildText($, text)
-	return addPrefixesToChildText(formattedText, parentTagType)
-}
+	const lines = html.split(/\r?\n/)
+	const formattedLines = []
 
-const formatPrimaryElement = (tag, element) => {
-	const text = element.text()
-	const nbsp = String.fromCharCode(160)
-	const isNewSection = text === nbsp && tag === 'p'
+	lines.forEach((line) => {
+		if (line === '&nbsp;' || line === '') {
+			return
+		}
+		const formattedLine = line.replace(/<[^>]*>/g, tagReplacer)
+		formattedLines.push(prefix + formattedLine.trim())
+	})
 
-	if (isNewSection) {
-		return null
-	} else {
-		const children = load(element.html())
-		return formatChildElements(children, text, tag)
-	}
+	return formattedLines.filter((value) => value).join('\n')
 }
 
 const buildChallengeReadme = (challengeName) => {
 	const { title, content } = getChallengeDataFromFile(challengeName)
-	const $ = load(content)
-	const primaryElements = $('p, pre')
+	const $ = load(content, null, false)
 
-	let readmeText = `# ${title}`
+	let markdown = `# ${title}\n`
 
-	let currentSection = 0
-	const numberOfSectionToHandle = 2
-	let currentPrimaryElementIndex = 0
-
-	const notAllSectionsHandled = () => currentSection < numberOfSectionToHandle
-	const notAllPrimaryElementsHandled = () =>
-		currentPrimaryElementIndex < primaryElements.length
-
-	while (notAllSectionsHandled() && notAllPrimaryElementsHandled()) {
-		const el = primaryElements[currentPrimaryElementIndex]
+	$('p, pre, li').each((_, el) => {
 		const tag = el.name
+		const html = $(el).html()
+		const mdElement = convertElementToMD(tag, html)
+		markdown += mdElement + '\n'
+	})
 
-		const formattedString = formatPrimaryElement(tag, $(el))
-		if (formattedString) {
-			readmeText += `\n${formattedString}`
-		} else {
-			currentSection++
-		}
-
-		currentPrimaryElementIndex++
-	}
-
-	saveChallengeReadme(challengeName, readmeText)
+	saveChallengeReadme(challengeName, markdown)
 }
 
 buildChallengeReadme(process.argv[2])
