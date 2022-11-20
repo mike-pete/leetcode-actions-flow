@@ -21,7 +21,7 @@ const tagReplacer = (match) => {
 
 	const tagReplacements = {
 		strong: '**',
-		code: '`',
+		em: '*',
 	}
 
 	if (tagContent in tagReplacements) {
