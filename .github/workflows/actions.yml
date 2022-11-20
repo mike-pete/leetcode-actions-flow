@@ -25,7 +25,8 @@ jobs:
                 solutionFolders+=("$directory")
               fi
             done
-            echo "solutionFolders=${solutionFolders[@]}" >> $GITHUB_OUTPUT
+            # echo "solutionFolders=${solutionFolders[@]}" >> $GITHUB_OUTPUT
+            echo "::set-output name=solutionFolders::${solutionFolders[@]}"
             
 
   buildREADMEs:
