@@ -1,23 +1,21 @@
 {
-  "name": "leetcode-actions-flow",
-  "version": "1.0.0",
-  "description": "A template repo for a clean LeetCode development flow (GitHub Actions)",
-  "main": "main.js",
-  "scripts": {
-    "start": "node main.mjs"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/kid-on-github/leetcode-actions-flow.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/kid-on-github/leetcode-actions-flow/issues"
-  },
-  "homepage": "https://github.com/kid-on-github/leetcode-actions-flow#readme",
-  "dependencies": {
-    "cheerio": "^1.0.0-rc.12",
-    "node-fetch": "^3.2.9"
-  }
+	"name": "leetcode-actions-flow",
+	"version": "1.0.0",
+	"description": "A template repo for a clean LeetCode development flow (GitHub Actions)",
+	"main": "main.js",
+	"type": "module",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/kid-on-github/leetcode-actions-flow.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/kid-on-github/leetcode-actions-flow/issues"
+	},
+	"homepage": "https://github.com/kid-on-github/leetcode-actions-flow#readme",
+	"dependencies": {
+		"cheerio": "^1.0.0-rc.12",
+		"node-fetch": "^3.2.9"
+	}
 }

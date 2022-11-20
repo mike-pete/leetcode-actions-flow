@@ -52,7 +52,7 @@ jobs:
         run: |
             for directory in ${solutionFolders[@]}
             do
-              node scripts/saveChallengeData.mjs $directory
+              node scripts/saveChallengeData.js $directory
             done
         
       - name: Block upload of invalid LeetCode challenge solutions
@@ -69,11 +69,11 @@ jobs:
         run: |
             for directory in ${solutionFolders[@]}
             do
-              node scripts/buildChallengeReadme.mjs $directory
+              node scripts/buildChallengeReadme.js $directory
             done
         
       - name: Update main challenge table
-        run: node scripts/buildRepoReadme.mjs
+        run: node scripts/buildRepoReadme.js
         
       - name: Push changes
         run: |
