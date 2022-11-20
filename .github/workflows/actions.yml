@@ -25,7 +25,7 @@ jobs:
                 solutionFolders+=("$directory")
               fi
             done
-            echo "::set-output name=solutionFolders::${solutionFolders[@]}"
+            echo "solutionFolders=${solutionFolders[@]}" >> $GITHUB_OUTPUT
             
 
   buildREADMEs:
@@ -41,7 +41,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v1 
         with:
-          node-version: '12.x'
+          node-version: '16.3'
       - name: Install node dependencies
         run: npm install --prefix ./scripts
         
