@@ -6,6 +6,36 @@ on:
       - 'solutions/**'
 
 jobs:
+  clearDeletedChallenges:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v1 
+        with:
+          node-version: '16.3'
+      - name: Install node dependencies
+        run: npm install --prefix ./scripts
+        
+      - name: Remove deleted challenges from stored json
+        run: |
+            for directory in ${git diff --summary ${{ github.event.before }} ${{ github.event.after }} | grep delete | cut -d "/" -f2 | uniq}
+            do
+              echo "removing challenge $directory"
+              if test -d "solutions/$directory"
+              then
+                if test $(ls solutions/$directory | wc -l) -eq "1" && $(test -f "solutions/$directory/README.md")
+                then
+                  rm -r solutions/$directory
+                  node scripts/removeChallenge.js $directory
+                fi
+              else
+                node scripts/removeChallenge.js $directory
+              fi
+            done
+
+
   checkForNeededREADMEs:
     runs-on: ubuntu-latest
     outputs:
