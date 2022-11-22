@@ -25,7 +25,7 @@ jobs:
               echo "removing challenge $directory"
               if test -d "solutions/$directory"
               then
-                if test $(ls solutions/$directory | wc -l) -eq "1" && $(test -f "solutions/$directory/README.md")
+                if test $(ls solutions/$directory | wc -l) -eq "1" && $(test -f "solutions/$directory/README.md") || test $(ls solutions/$directory | wc -l) -eq "0"
                 then
                   rm -r solutions/$directory
                   node scripts/removeChallenge.js $directory
