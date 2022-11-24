@@ -1,25 +1,19 @@
 import fetch from 'node-fetch'
 import fs from 'fs'
-
-const getChallengeDataFromFile = () => {
-	const data = fs.readFileSync(
-		'./scripts/challengeSummary.json'
-	)
-	return JSON.parse(data)
-}
+import { getChallengeData } from './utils'
 
 const getChallengeDataFromGraphQL = async (challengeName) => {
 	const query = `
-    query allQuestions($titleSlug: String!) {
-      question(titleSlug: $titleSlug) {
-		questionId
-        title
-        content
-        difficulty
-        categoryTitle
-      }
-    }
-  `
+		query allQuestions($titleSlug: String!) {
+			question(titleSlug: $titleSlug) {
+				questionId
+				title
+				content
+				difficulty
+				categoryTitle
+			}
+		}
+  	`
 
 	const graphql = JSON.stringify({
 		query,
@@ -36,20 +30,11 @@ const getChallengeDataFromGraphQL = async (challengeName) => {
 	const response = await fetch(
 		'https://leetcode.com/graphql',
 		requestOptions
-	).catch((error) => {
-		console.error('error fetching data', error)
-		return null
-	})
-	const responseJSON = await response.json()
+	).catch((error) => console.log('error', error))
 
-	const { errors } = responseJSON
+	const responseJSON = (await response?.json()) ?? null
 
-	if (errors) {
-		console.error('error fetching data', errors)
-		return null
-	} else {
-		return responseJSON
-	}
+	return responseJSON
 }
 
 const writeChallengeDataToFile = (challengeData) => {
@@ -65,8 +50,7 @@ const saveChallengeData = async (challengeName) => {
 	if (graphQLData) {
 		const { question } = graphQLData.data
 		question.challengeName = challengeName
-		const savedChallengeData = getChallengeDataFromFile()
-		let updatedChallengeData = { ...savedChallengeData }
+		let updatedChallengeData = getChallengeData()
 		const key = challengeName.toLowerCase()
 		updatedChallengeData.challengesCompleted[key] = question
 

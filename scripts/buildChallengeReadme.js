@@ -1,11 +1,6 @@
 import { load } from 'cheerio'
 import fs from 'fs'
-
-const getChallengeDataFromFile = (challengeName) => {
-	const data = fs.readFileSync('./scripts/challengeSummary.json')
-	const { challengesCompleted } = JSON.parse(data || {})
-	return challengesCompleted[challengeName.toLowerCase()]
-}
+import { getChallengeData } from './utils'
 
 const saveChallengeReadme = (fileName, fileContents) => {
 	fs.writeFile(`solutions/${fileName}/README.md`, fileContents, (err) => {
@@ -56,7 +51,9 @@ const convertElementToMD = (tag, html) => {
 }
 
 const buildChallengeReadme = (challengeName) => {
-	const { title, content } = getChallengeDataFromFile(challengeName)
+	const { challengesCompleted } = getChallengeData()
+	const { title, content } = challengesCompleted?.[challengeName]
+
 	const $ = load(content, null, false)
 
 	let markdown = `# ${title}\n`
