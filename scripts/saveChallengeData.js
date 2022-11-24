@@ -47,7 +47,7 @@ const writeChallengeDataToFile = (challengeData) => {
 const saveChallengeData = async (challengeName) => {
 	const graphQLData = await getChallengeDataFromGraphQL(challengeName)
 
-	if (graphQLData) {
+	if (graphQLData?.data?.question) {
 		const { question } = graphQLData.data
 		question.challengeName = challengeName
 		let updatedChallengeData = getChallengeData()
