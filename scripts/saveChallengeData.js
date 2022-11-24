@@ -27,10 +27,7 @@ const getChallengeDataFromGraphQL = async (challengeName) => {
 		redirect: 'follow',
 	}
 
-	const response = await fetch(
-		'https://leetcode.com/graphql',
-		requestOptions
-	).catch((error) => console.log('error', error))
+	const response = await fetch('https://leetcode.com/graphql', requestOptions)
 
 	const responseJSON = (await response?.json()) ?? null
 
@@ -55,6 +52,11 @@ const saveChallengeData = async (challengeName) => {
 		updatedChallengeData.challengesCompleted[key] = question
 
 		writeChallengeDataToFile(updatedChallengeData)
+	} else if (graphQLData?.errors) {
+		console.error(
+			'Problem with GraphQL query, double check your challenge name!'
+		)
+		console.error(graphQLData.errors)
 	}
 }
 
