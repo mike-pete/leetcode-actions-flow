@@ -6,7 +6,6 @@ Same basic desc
 ## Solutions
 | LC # | Challenge Overview | Difficulty | Solutions | Category |
 | - | --------- | ---------- | --------- | -------- |
-| [1](https://leetcode.com/problems/two-sum/) | [Two Sum](solutions/two-sum) | Easy | [Python](solutions/two-sum/solution.py) | Algorithms |
 
 ## How it Works
 super basic overview
