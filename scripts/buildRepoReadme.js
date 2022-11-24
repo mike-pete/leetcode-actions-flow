@@ -1,5 +1,5 @@
 import fs from 'fs'
-import { getChallengeData } from './utils'
+import { getChallengeData } from './utils.js'
 
 // languages supported: C++, Java, Python, Python3, C, C#, JavaScript, Ruby, Swift, Go, Scala, Kotlin, Rust, PHP, TypeScript, Racket, Erlang, Elixir, Dart
 const fileExtensions = {

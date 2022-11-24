@@ -1,6 +1,6 @@
 import { load } from 'cheerio'
 import fs from 'fs'
-import { getChallengeData } from './utils'
+import { getChallengeData } from './utils.js'
 
 const saveChallengeReadme = (fileName, fileContents) => {
 	fs.writeFile(`solutions/${fileName}/README.md`, fileContents, (err) => {

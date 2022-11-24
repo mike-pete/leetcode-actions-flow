@@ -1,6 +1,6 @@
 import fetch from 'node-fetch'
 import fs from 'fs'
-import { getChallengeData } from './utils'
+import { getChallengeData } from './utils.js'
 
 const getChallengeDataFromGraphQL = async (challengeName) => {
 	const query = `
