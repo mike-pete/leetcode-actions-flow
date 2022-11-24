@@ -20,7 +20,7 @@ jobs:
         
       - name: Remove deleted challenges from stored json
         run: |
-            for directory in ${git diff --summary ${{ github.event.before }} ${{ github.event.after }} | grep delete | cut -d "/" -f2 | uniq}
+            for directory in $(git diff --summary ${{ github.event.before }} ${{ github.event.after }} | grep delete | cut -d "/" -f2 | uniq)
             do
               echo "removing challenge $directory"
               if test -d "solutions/$directory"
