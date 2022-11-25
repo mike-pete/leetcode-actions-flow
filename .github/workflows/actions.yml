@@ -14,65 +14,64 @@ jobs:
         with:
           fetch-depth: 0
       - name: Setup node
-        uses: actions/setup-node@v3 
+        uses: actions/setup-node@v3
         with:
           node-version: '16.3'
       - name: Install node dependencies
         run: npm install --prefix ./scripts
-        
+
       - name: Remove deleted challenges from stored json
         run: |
-            for directory in $(git diff --summary ${{ github.event.before }} ${{ github.event.after }} | grep delete | cut -d "/" -f2 | uniq)
-            do
-              echo "removing challenge $directory"
-              if test -d "solutions/$directory"
+          for directory in $(git diff --summary ${{ github.event.before }} ${{ github.event.after }} | grep delete | cut -d "/" -f2 | uniq)
+          do
+            echo "removing challenge $directory"
+            if test -d "solutions/$directory"
+            then
+              if test $(ls solutions/$directory | wc -l) -eq "1" && $(test -f "solutions/$directory/README.md") || test $(ls solutions/$directory | wc -l) -eq "0"
               then
-                if test $(ls solutions/$directory | wc -l) -eq "1" && $(test -f "solutions/$directory/README.md") || test $(ls solutions/$directory | wc -l) -eq "0"
-                then
-                  rm -r solutions/$directory
-                  node scripts/removeChallenge.js $directory
-                fi
-              else
+                rm -r solutions/$directory
                 node scripts/removeChallenge.js $directory
               fi
-            done
-        
+            else
+              node scripts/removeChallenge.js $directory
+            fi
+          done
+
       - name: Update main challenge table
         run: node scripts/buildRepoReadme.js
-        
+
       - name: Push changes
         run: |
-            if [[ "$(git status --porcelain)" != "" ]]
-            then
-              git config user.name "GitHub Action"
-              git config user.email "action@github.com"
-              git add .
-              git commit -m "Auto-generate README.md"
-              git push
-            fi
-
+          if [[ "$(git status --porcelain)" != "" ]]
+          then
+            git config user.name "GitHub Action"
+            git config user.email "action@github.com"
+            git add .
+            git commit -m "Auto-generate README.md"
+            git push
+          fi
 
   checkForNeededREADMEs:
+    needs: [clearDeletedChallenges]
     runs-on: ubuntu-latest
     outputs:
       foldersNeedingREADMEs: ${{ steps.set_directories.outputs.solutionFolders }}
-      
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-            
+
       - name: Check repo for directories without READMEs
         id: set_directories
         run: |
-            for directory in $(ls -d solutions/* | cut -d / -f2)
-            do
-              if ! test -f "solutions/$directory/README.md"
-              then
-                solutionFolders+=("$directory")
-              fi
-            done
-            echo "solutionFolders=${solutionFolders[@]}" >> $GITHUB_OUTPUT
-            
+          for directory in $(ls -d solutions/* | cut -d / -f2)
+          do
+            if ! test -f "solutions/$directory/README.md"
+            then
+              solutionFolders+=("$directory")
+            fi
+          done
+          echo "solutionFolders=${solutionFolders[@]}" >> $GITHUB_OUTPUT
 
   buildREADMEs:
     needs: [checkForNeededREADMEs]
@@ -90,44 +89,44 @@ jobs:
           node-version: '16.3'
       - name: Install node dependencies
         run: npm install --prefix ./scripts
-        
+
       - name: Echo local folder list
         run: echo ${solutionFolders[@]}
-        
+
       - name: Gather question data json for each valid challenge
         run: |
-            for directory in ${solutionFolders[@]}
-            do
-              node scripts/saveChallengeData.js $directory
-            done
-        
+          for directory in ${solutionFolders[@]}
+          do
+            node scripts/saveChallengeData.js $directory
+          done
+
       - name: Block upload of invalid LeetCode challenge solutions
         run: |
-            for directory in ${solutionFolders[@]}
-            do
-              if ! $(jq '.challengesCompleted | has("'$directory'")' scripts/challengeSummary.json)
-              then
-                rm -r solutions/$directory
-              fi
-            done
-        
+          for directory in ${solutionFolders[@]}
+          do
+            if ! $(jq '.challengesCompleted | has("'$directory'")' scripts/challengeSummary.json)
+            then
+              rm -r solutions/$directory
+            fi
+          done
+
       - name: Generate individual solution READMEs
         run: |
-            for directory in ${solutionFolders[@]}
-            do
-              node scripts/buildChallengeReadme.js $directory
-            done
-        
+          for directory in ${solutionFolders[@]}
+          do
+            node scripts/buildChallengeReadme.js $directory
+          done
+
       - name: Update main challenge table
         run: node scripts/buildRepoReadme.js
-        
+
       - name: Push changes
         run: |
-            if [[ "$(git status --porcelain)" != "" ]]
-            then
-              git config user.name "GitHub Action"
-              git config user.email "action@github.com"
-              git add .
-              git commit -m "Auto-generate README.md"
-              git push
-            fi
+          if [[ "$(git status --porcelain)" != "" ]]
+          then
+            git config user.name "GitHub Action"
+            git config user.email "action@github.com"
+            git add .
+            git commit -m "Auto-generate README.md"
+            git push
+          fi
