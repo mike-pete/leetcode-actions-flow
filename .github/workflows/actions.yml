@@ -33,7 +33,7 @@ jobs:
                 # node scripts/removeChallenge.js $directory
                 # node scripts/buildRepoReadme.js
               fi
-            else
+            # else
               # node scripts/removeChallenge.js $directory
             fi
             
