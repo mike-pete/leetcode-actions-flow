@@ -1,6 +1,5 @@
 import fs from 'fs'
 import { getChallengeData } from './utils.js'
-import { removeChallenge } from './removeChallenge.js'
 
 // languages supported: C++, Java, Python, Python3, C, C#, JavaScript, Ruby, Swift, Go, Scala, Kotlin, Rust, PHP, TypeScript, Racket, Erlang, Elixir, Dart
 const fileExtensions = {
@@ -45,42 +44,36 @@ const buildRepoReadme = () => {
 
 	Object.values(challengesCompleted).forEach(
 		({ title, difficulty, categoryTitle, questionId, challengeName }) => {
-			const directoryExists = fs.existsSync(`solutions/${challengeName}`)
-
-			if (!directoryExists) {
-				removeChallenge(challengeName)
-				return
-			}
-
 			const files = fs.readdirSync(`solutions/${challengeName}`) || []
 
+			const challengeId = `[${questionId}](https://leetcode.com/problems/${challengeName}/)`
 
-			if (files.length === 0) {
-				const challengeId = `[${questionId}](https://leetcode.com/problems/${challengeName}/)`
+			const challenge = `[${title}](solutions/${challengeName})`
 
-				const challenge = `[${title}](solutions/${challengeName})`
+			const solutions = files.map((file) => {
+				const splitAtDots = file.split('.')
+				const extension = splitAtDots[splitAtDots.length - 1]
+				let language = fileExtensions[extension]
 
-				const solutions = files.map((file) => {
-					const splitAtDots = file.split('.')
-					const extension = splitAtDots[splitAtDots.length - 1]
-					let language = fileExtensions[extension]
+				if (
+					splitAtDots.length === 2 &&
+					splitAtDots[0].toLowerCase() === 'test'
+				) {
+					return
+				}
+				if (language === 'Markdown') {
+					return
+				}
+				if (language === undefined) {
+					language = `Unknown Language (.${extension})`
+				}
 
-					if (language === 'Markdown') {
-						return
-					}
-					if (language === undefined) {
-						language = `Unknown Language (.${extension})`
-					}
+				return `[${language}](solutions/${challengeName}/${file})`
+			})
 
-					return `[${language}](solutions/${challengeName}/${file})`
-				})
-
-				table += `\n| ${challengeId} | ${challenge} | ${difficulty} | ${solutions
-					.filter((value) => value)
-					.join(', ')} | ${categoryTitle} |`
-			} else {
-				removeChallenge(challengeName)
-			}
+			table += `\n| ${challengeId} | ${challenge} | ${difficulty} | ${solutions
+				.filter((value) => value)
+				.join(', ')} | ${categoryTitle} |`
 		}
 	)
 
