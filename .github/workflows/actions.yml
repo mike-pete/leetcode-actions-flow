@@ -47,7 +47,7 @@ jobs:
             git config user.name "GitHub Action"
             git config user.email "action@github.com"
             git add .
-            git commit -m "Auto-generate README.md"
+            git commit -m "Clean up empty challenge directories"
             git push
           fi
 
