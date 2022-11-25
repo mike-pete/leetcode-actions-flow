@@ -45,7 +45,15 @@ const buildRepoReadme = () => {
 
 	Object.values(challengesCompleted).forEach(
 		({ title, difficulty, categoryTitle, questionId, challengeName }) => {
+			const directoryExists = fs.existsSync(`solutions/${challengeName}`)
+
+			if (!directoryExists) {
+				removeChallenge(challengeName)
+				return
+			}
+
 			const files = fs.readdirSync(`solutions/${challengeName}`) || []
+
 
 			if (files.length === 0) {
 				const challengeId = `[${questionId}](https://leetcode.com/problems/${challengeName}/)`
