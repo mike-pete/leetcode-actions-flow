@@ -30,11 +30,13 @@ jobs:
               if test $(ls solutions/$directory | wc -l) -eq "1" && $(test -f "solutions/$directory/README.md") || test $(ls solutions/$directory | wc -l) -eq "0"
               then
                 rm -r solutions/$directory
-                node scripts/removeChallenge.js $directory
+                # node scripts/removeChallenge.js $directory
+                # node scripts/buildRepoReadme.js
               fi
             else
-              node scripts/removeChallenge.js $directory
+              # node scripts/removeChallenge.js $directory
             fi
+            
           done
 
       - name: Update main challenge table
@@ -114,15 +116,15 @@ jobs:
             fi
           done
 
+      - name: Update main challenge table
+        run: node scripts/buildRepoReadme.js
+
       - name: Generate individual solution READMEs
         run: |
           for directory in ${solutionFolders[@]}
           do
             node scripts/buildChallengeReadme.js $directory
           done
-
-      - name: Update main challenge table
-        run: node scripts/buildRepoReadme.js
 
       - name: Push changes
         run: |

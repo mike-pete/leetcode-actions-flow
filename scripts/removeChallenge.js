@@ -1,6 +1,6 @@
 import { getChallengeData, writeChallengeDataToFile } from './utils.js'
 
-const removeChallenge = (challengeName) => {
+export const removeChallenge = (challengeName) => {
 	const challengeData = getChallengeData()
 	delete challengeData.challengesCompleted?.[challengeName]
 	writeChallengeDataToFile(challengeData)
