@@ -20,9 +20,11 @@ jobs:
       
       - name: Remove deleted challenges from json
         run: | 
-          for challenge in $(jq -r '.challengesCompleted | keys[]' scripts/challengeSummary.json) # for each challenge in the json
+          # for each challenge in the json
+          for challenge in $(jq -r '.challengesCompleted | keys[]' scripts/challengeSummary.json)
           do
-            if test ! -d "solutions/$challenge" # if there's no challenge directory
+            # if there's no challenge directory
+            if test ! -d "solutions/$challenge"
             then
               echo "removing $challenge"
               node scripts/removeChallenge.js $challenge
