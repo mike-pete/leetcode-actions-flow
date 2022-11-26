@@ -14,7 +14,6 @@ description here with a link to our leetcode repos
 | C++        | .cpp            |
 | Java       | .java           |
 | Python     | .py             |
-| Python3    | .py3            |
 | C          | .c              |
 | C#         | .cs             |
 | JavaScript | .js             |

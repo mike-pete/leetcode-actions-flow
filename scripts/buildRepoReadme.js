@@ -6,7 +6,6 @@ const fileExtensions = {
 	cpp: 'C++',
 	java: 'Java',
 	py: 'Python',
-	py3: 'Python3',
 	c: 'C',
 	cs: 'C#',
 	js: 'JavaScript',
