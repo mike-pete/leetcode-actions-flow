@@ -11,3 +11,11 @@ export const writeChallengeDataToFile = (challengeData) => {
 		JSON.stringify(challengeData)
 	)
 }
+
+export const saveFile = (path, fileName, contents) => {
+	fs.writeFile(`${path}/${fileName}`, contents, (err) => {
+		if (err) {
+			console.error(err)
+		}
+	})
+}
