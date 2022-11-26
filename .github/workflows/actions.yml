@@ -20,11 +20,13 @@ jobs:
       
       - name: Remove deleted challenges from json
         run: | 
-          # for each challenge in the json
-          for challenge in $(jq -r '.challengesCompleted | keys[]' scripts/challengeSummary.json)
+          challengesFromJson=$(jq -r '.challengesCompleted | keys[]' scripts/challengeSummary.json)
+          
+          for challenge in $challengesFromJson
           do
-            # if there's no challenge directory
-            if test ! -d "solutions/$challenge"
+            directoryExists=$(test ! -d "solutions/$challenge")
+            
+            if $directoryExists
             then
               echo "removing $challenge"
               node scripts/removeChallenge.js $challenge
@@ -34,19 +36,24 @@ jobs:
       
       - name: Generate Challenge READMEs
         run: |
-          # for each challenge directory
-          for directory in $(ls -d solutions/* | cut -d / -f2)
+          challengeDirectories=$(ls -d solutions/* | cut -d / -f2)
+          
+          for directory in $challengeDirectories
           do
-            # if the challenge does not have a README
-            if ! test -f "solutions/$directory/README.md"
+            readmeExists=$(test -f "solutions/$directory/README.md")
+            
+            if ! $readmeExists
             then
               echo "building README for $directory"
               node scripts/saveChallengeData.js $directory
               node scripts/buildChallengeReadme.js $directory
             fi
             
-            # if the only file in the challenge directory is a README (there are no challenge solutions)
-            if test $(ls solutions/$directory | wc -l) -eq "1" && $(test -f "solutions/$directory/README.md")
+            
+            onlyOneFileInDirectory=$(test $(ls solutions/$directory | wc -l) -eq "1")
+            readmeExists=$(test -f "solutions/$directory/README.md")
+            
+            if [ $onlyOneFileInDirectory ] && [ $readmeExists ]
             then
               echo "removing $directory"
               rm -r solutions/$directory
