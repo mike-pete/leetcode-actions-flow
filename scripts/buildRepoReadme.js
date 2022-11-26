@@ -42,40 +42,42 @@ const buildRepoReadme = () => {
 | LC # | Challenge Overview | Difficulty | Solutions | Category |
 | - | --------- | ---------- | --------- | -------- |`
 
-	Object.values(challengesCompleted).forEach(
-		({ title, difficulty, categoryTitle, questionId, challengeName }) => {
-			const files = fs.readdirSync(`solutions/${challengeName}`) || []
+	Object.values(challengesCompleted)
+		.sort((a, b) => a.questionId - b.questionId)
+		.forEach(
+			({ title, difficulty, categoryTitle, questionId, challengeName }) => {
+				const files = fs.readdirSync(`solutions/${challengeName}`) || []
 
-			const challengeId = `[${questionId}](https://leetcode.com/problems/${challengeName}/)`
+				const challengeId = `[${questionId}](https://leetcode.com/problems/${challengeName}/)`
 
-			const challenge = `[${title}](solutions/${challengeName})`
+				const challenge = `[${title}](solutions/${challengeName})`
 
-			const solutions = files.map((file) => {
-				const splitAtDots = file.split('.')
-				const extension = splitAtDots[splitAtDots.length - 1]
-				let language = fileExtensions[extension]
+				const solutions = files.map((file) => {
+					const splitAtDots = file.split('.')
+					const extension = splitAtDots[splitAtDots.length - 1]
+					let language = fileExtensions[extension]
 
-				if (
-					splitAtDots.length === 2 &&
-					splitAtDots[0].toLowerCase() === 'test'
-				) {
-					return
-				}
-				if (language === 'Markdown') {
-					return
-				}
-				if (language === undefined) {
-					language = `Unknown Language (.${extension})`
-				}
+					if (
+						splitAtDots.length === 2 &&
+						splitAtDots[0].toLowerCase() === 'test'
+					) {
+						return
+					}
+					if (language === 'Markdown') {
+						return
+					}
+					if (language === undefined) {
+						language = `Unknown Language (.${extension})`
+					}
 
-				return `[${language}](solutions/${challengeName}/${file})`
-			})
+					return `[${language}](solutions/${challengeName}/${file})`
+				})
 
-			table += `\n| ${challengeId} | ${challenge} | ${difficulty} | ${solutions
-				.filter((value) => value)
-				.join(', ')} | ${categoryTitle} |`
-		}
-	)
+				table += `\n| ${challengeId} | ${challenge} | ${difficulty} | ${solutions
+					.filter((value) => value)
+					.join(', ')} | ${categoryTitle} |`
+			}
+		)
 
 	Object.entries(readmeSummary).map(([i, section]) => {
 		readme += `\n\n${section}`
