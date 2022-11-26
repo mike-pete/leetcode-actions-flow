@@ -1,18 +1,9 @@
 import { load } from 'cheerio'
-import fs from 'fs'
-import { getChallengeData } from './utils.js'
+import { getChallengeData, saveFile } from './utils.js'
 
-const saveChallengeReadme = (fileName, fileContents) => {
-	fs.writeFile(`solutions/${fileName}/README.md`, fileContents, (err) => {
-		if (err) {
-			console.error(err)
-		}
-	})
-}
-
-const tagReplacer = (match) => {
-	const tagStart = match.substring(0, 2) === '</' ? '</' : '<'
-	const tagContent = match.substring(tagStart.length, match.length - 1)
+const tagReplacer = (tag) => {
+	const tagStart = tag.substring(0, 2) === '</' ? '</' : '<'
+	const tagContent = tag.substring(tagStart.length, tag.length - 1)
 
 	const tagReplacements = {
 		strong: '**',
@@ -23,39 +14,36 @@ const tagReplacer = (match) => {
 		return tagReplacements[tagContent]
 	}
 
-	for (const tag of Object.keys(tagReplacements)) {
-		if (tagContent.startsWith(tag)) {
-			return tagReplacements[tag]
+	for (const tagType of Object.keys(tagReplacements)) {
+		if (tagContent.startsWith(tagType)) {
+			return tagReplacements[tagType]
 		}
 	}
 
-	return match
+	return tag
 }
 
 const convertElementToMD = (tag, html) => {
 	const prefixes = { p: '\n', pre: '>\n> ', li: '\n- ' }
 	const prefix = prefixes[tag]
-
 	const lines = html.split(/\r?\n/)
 	const formattedLines = []
 
 	lines.forEach((line) => {
-		if (line === '&nbsp;' || line === '') {
+		if (!line || line === '&nbsp;' || line === '') {
 			return
 		}
 		const formattedLine = line.replace(/<[^>]*>/g, tagReplacer)
 		formattedLines.push(prefix + formattedLine.trim())
 	})
 
-	return formattedLines.filter((value) => value).join('\n')
+	return formattedLines.join('\n')
 }
 
 const buildChallengeReadme = (challengeName) => {
 	const { challengesCompleted } = getChallengeData()
 	const { title, content } = challengesCompleted?.[challengeName]
-
 	const $ = load(content, null, false)
-
 	let markdown = `# ${title}\n`
 
 	$('p, pre, li').each((_, el) => {
@@ -65,7 +53,7 @@ const buildChallengeReadme = (challengeName) => {
 		markdown += mdElement + '\n'
 	})
 
-	saveChallengeReadme(challengeName, markdown)
+	saveFile(`solutions/${challengeName}`, 'README.md', markdown)
 }
 
 buildChallengeReadme(process.argv[2])

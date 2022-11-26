@@ -27,9 +27,7 @@ const getChallengeDataFromGraphQL = async (challengeName) => {
 	}
 
 	const response = await fetch('https://leetcode.com/graphql', requestOptions)
-
 	const responseJSON = (await response?.json()) ?? null
-
 	return responseJSON
 }
 

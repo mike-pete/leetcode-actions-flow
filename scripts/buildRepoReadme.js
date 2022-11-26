@@ -1,7 +1,6 @@
 import fs from 'fs'
-import { getChallengeData } from './utils.js'
+import { getChallengeData, saveFile } from './utils.js'
 
-// languages supported: C++, Java, Python, Python3, C, C#, JavaScript, Ruby, Swift, Go, Scala, Kotlin, Rust, PHP, TypeScript, Racket, Erlang, Elixir, Dart
 const fileExtensions = {
 	cpp: 'C++',
 	java: 'Java',
@@ -24,68 +23,73 @@ const fileExtensions = {
 	md: 'Markdown',
 }
 
-const saveRepoReadme = (fileContents) => {
-	fs.writeFile(`./README2.md`, fileContents, (err) => {
-		if (err) {
-			console.error(err)
-		}
+const buildTableHeader = (columnLabels) => {
+	let header = '|'
+	let divider = '|'
+	columnLabels.forEach((label) => {
+		header += ` ${label} |`
+		divider += ` ${'-'.repeat(label.length)} |`
 	})
+	return `${header}\n${divider}`
 }
 
-const buildRepoReadme = () => {
-	const { readmeSummary, challengesCompleted } = getChallengeData()
+const generateLinksToSolutionFiles = (challengeName, files) => {
+	let solutions = ''
 
-	let readme = ''
+	files.forEach((file) => {
+		const splitAtDots = file.split('.')
+		const extension = splitAtDots[splitAtDots.length - 1].toLowerCase()
 
-	let table = `\
-| LC # | Challenge Overview | Difficulty | Solutions | Category |
-| - | --------- | ---------- | --------- | -------- |`
+		if (splitAtDots.length === 2 && splitAtDots[0].toLowerCase() === 'test') {
+			return
+		}
+		if (extension === 'md') {
+			return
+		}
 
+		const language =
+			extension in fileExtensions
+				? fileExtensions[extension]
+				: `Unknown Language (.${extension})`
+
+		solutions += `[${language}](solutions/${challengeName}/${file}), `
+	})
+
+	return solutions
+}
+
+const buildTable = (challengesCompleted) => {
+	const tableHeader = buildTableHeader([
+		'LC #',
+		'Challenge Overview',
+		'Difficulty',
+		'Solutions',
+		'Category',
+	])
+
+	let table = tableHeader
 	Object.values(challengesCompleted)
 		.sort((a, b) => a.questionId - b.questionId)
 		.forEach(
 			({ title, difficulty, categoryTitle, questionId, challengeName }) => {
 				const files = fs.readdirSync(`solutions/${challengeName}`) || []
-
 				const challengeId = `[${questionId}](https://leetcode.com/problems/${challengeName}/)`
-
 				const challenge = `[${title}](solutions/${challengeName})`
-
-				const solutions = files.map((file) => {
-					const splitAtDots = file.split('.')
-					const extension = splitAtDots[splitAtDots.length - 1]
-					let language = fileExtensions[extension]
-
-					if (
-						splitAtDots.length === 2 &&
-						splitAtDots[0].toLowerCase() === 'test'
-					) {
-						return
-					}
-					if (language === 'Markdown') {
-						return
-					}
-					if (language === undefined) {
-						language = `Unknown Language (.${extension})`
-					}
-
-					return `[${language}](solutions/${challengeName}/${file})`
-				})
-
-				table += `\n| ${challengeId} | ${challenge} | ${difficulty} | ${solutions
-					.filter((value) => value)
-					.join(', ')} | ${categoryTitle} |`
+				const solutionLinks = generateLinksToSolutionFiles(challengeName, files)
+				table += `\n| ${challengeId} | ${challenge} | ${difficulty} | ${solutionLinks} | ${categoryTitle} |`
 			}
 		)
 
-	Object.entries(readmeSummary).map(([i, section]) => {
-		readme += `\n\n${section}`
-		if (i === '0') {
-			readme += `\n\n## Solutions\n${table}`
-		}
-	})
+	return table
+}
 
-	saveRepoReadme(readme)
+const buildRepoReadme = () => {
+	const { readmeSummary, challengesCompleted } = getChallengeData()
+	const sections = readmeSummary
+	const table = buildTable(challengesCompleted)
+	sections.splice(1, 0, `## Solutions\n${table}`)
+	const readme = sections.join('\n\n')
+	saveFile('.', 'README.md', readme)
 }
 
 buildRepoReadme()
