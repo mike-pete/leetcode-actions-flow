@@ -1,7 +1,7 @@
 {
     "readmeSummary": [
         "# LeetCode Solutions\nAs solutions to LeetCode challenges are added to the solutions folder, Github Actions automatically generate documentation from the challenge description on [LeetCode.com](http://leetcode.com)",
-        "## Usage\nAdd solutions to LeetCode challenges, inside a directory named after the challenge, to the solutions directory. The directory name must match the name of a LeetCode challenge. If the challenge directory does not contain a README, GitHub Actions will generate one from the challenge description on LeetCode.com and add it to the table on the main repo README.\n\n#### [fork the project](http://tinyurl.com/b00tyful2) "
+        "## Usage\nAdd solutions to LeetCode challenges, inside a directory named after the challenge, to the solutions directory. The directory name must match the name of a LeetCode challenge. If the challenge directory does not contain a README, GitHub Actions will generate one from the challenge description on LeetCode.com and add it to the table on the main repo README.\n\n## Authors\n- [Michael Peterson](https://github.com/kid-on-github)\n- [Andrew Larson](https://github.com/Kefka174)#### [fork the project](http://tinyurl.com/b00tyful2) "
     ],
     "challengesCompleted": {
         "3sum": {
