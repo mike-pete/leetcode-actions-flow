@@ -1,35 +1,15 @@
 # LeetCode Solutions
-A template repo for a clean LeetCode development flow using GitHub Actions.
+As solutions to LeetCode challenges are added to the solutions folder, Github Actions automatically generate documentation from the challenge description on [LeetCode.com](http://leetcode.com)
 
-## How it Works
+## Solutions
+| LC # | Challenge Overview | Difficulty | Solutions | Category |
+| ---- | ------------------ | ---------- | --------- | -------- |
+| [1](https://leetcode.com/problems/Two-Sum/) | [Two Sum](solutions/Two-Sum) | Easy | [Python](solutions/Two-Sum/solution.py),  | Algorithms |
+
 ## Usage
-talk about file and directory naming
-don't upload non-solutions to the /solutions directory
-## Example
-description here with a link to our leetcode repos
-## Filetypes Supported
-
-| Language   | File Extensions |
-|------------|-----------------|
-| C++        | .cpp            |
-| Java       | .java           |
-| Python     | .py             |
-| C          | .c              |
-| C#         | .cs             |
-| JavaScript | .js             |
-| TypeScript | .ts             |
-| Ruby       | .rb             |
-| Swift      | .swift          |
-| Go         | .go             |
-| Scala      | .sc             |
-| Kotlin     | .kt             |
-| Rust       | .rs             |
-| PHP        | .php            |
-| Racket     | .rkt            |
-| Erlang     | .erl            |
-| Elixir     | .exs            |
-| Dart       | .dart           |
+Add solutions to LeetCode challenges, inside a directory named after the challenge, to the solutions directory. The directory name must match the name of a LeetCode challenge. If the challenge directory does not contain a README, GitHub Actions will generate one from the challenge description on LeetCode.com and add it to the table on the main repo README.
 
 ## Authors
 - [Michael Peterson](https://github.com/kid-on-github)
 - [Andrew Larson](https://github.com/Kefka174)
+#### [fork the project](https://github.com/kid-on-github/leetcode-actions-flow)
