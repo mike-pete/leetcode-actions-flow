@@ -42,7 +42,7 @@ const convertElementToMD = (tag, html) => {
 
 const buildChallengeReadme = (challengeName) => {
 	const { challengesCompleted } = getChallengeData()
-	const { title, content } = challengesCompleted?.[challengeName]
+	const { title, content } = challengesCompleted?.[challengeName.toLowerCase()]
 	const $ = load(content, null, false)
 	let markdown = `# ${title}\n`
 
