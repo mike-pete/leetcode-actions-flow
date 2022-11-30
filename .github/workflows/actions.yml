@@ -1,0 +1,77 @@
+name: Generate READMEs
+
+on:
+  push:
+    paths:
+      - 'solutions/**'
+
+jobs:
+  updateChallengeREADMEs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Setup node
+        uses: actions/setup-node@v3
+      - name: Install node dependencies
+        run: npm install --prefix ./scripts
+      
+      
+      - name: Remove deleted challenges from json
+        run: | 
+          challengesFromJson=$(jq -r '.challengesCompleted | keys[]' scripts/challengeSummary.json)
+          
+          for challenge in $challengesFromJson
+          do
+            directoryExists=$(test ! -d "solutions/$challenge")
+            
+            if $directoryExists
+            then
+              echo "removing $challenge"
+              node scripts/removeChallenge.js $challenge
+            fi
+          done
+      
+      
+      - name: Generate Challenge READMEs
+        run: |
+          challengeDirectories=$(ls -d solutions/* | cut -d / -f2)
+          
+          for directory in $challengeDirectories
+          do
+            readmeExists=$(test -f "solutions/$directory/README.md")
+            
+            if ! $readmeExists
+            then
+              echo "building README for $directory"
+              node scripts/saveChallengeData.js $directory
+              node scripts/buildChallengeReadme.js $directory
+            fi
+            
+            
+            onlyOneFileInDirectory=$(test $(ls solutions/$directory | wc -l) -eq "1")
+            readmeExists=$(test -f "solutions/$directory/README.md")
+            
+            if [ $onlyOneFileInDirectory ] && [ $readmeExists ]
+            then
+              echo "removing $directory"
+              rm -r solutions/$directory
+              node scripts/removeChallenge.js $directory
+            fi
+          done
+      
+      
+      - name: Update main challenge table
+        run: node scripts/buildRepoReadme.js
+      
+      - name: Push changes
+        run: |
+          if [[ "$(git status --porcelain)" != "" ]]
+          then
+            git config user.name "GitHub Action"
+            git config user.email "action@github.com"
+            git add .
+            git commit -m "Auto-generate README.md"
+            git push
+          fi
